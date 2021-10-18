@@ -22,7 +22,7 @@ class RoleFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>$this->faker->randomElement(['admin','user']),
+            'role'=>$this->faker->randomElement(['admin','user']),
         ];
     }
 }
