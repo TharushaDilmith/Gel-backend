@@ -62,6 +62,9 @@ Route::middleware('auth:api')->group(function () {
     //get a course
     Route::middleware(['scope:admin,user'])->get('/course/{id}', [CourseController::class, 'getCourse']);
 
+    //logout
+    Route::middleware(['scope:admin,user'])->post('logout', [AuthController::class, 'logout']);
+
 
     
 });
@@ -69,7 +72,7 @@ Route::middleware('auth:api')->group(function () {
 //normal api
 
 //get all courses
-Route::get('/courses', [CourseController::class, 'getAllCourses']);
+Route::get('/courses', [CourseController::class, 'getCourses']);
 
 //get all awarding bodies
 Route::get('/awarding_bodies', [AwardingBodyController::class, 'getAllAwardingBodies']);
