@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Course;
 
 class CourseController extends Controller
 {
@@ -14,15 +15,17 @@ class CourseController extends Controller
             'image' => 'required',
             'url' => 'required',
             'awardingbody_id' => 'required',
-            'resoursetype_id' => 'required',
+            'resourcetype_id' => 'required',
         ]);
 
+       
+
         $course = new Course();
-        $course->name = $request->input('name');
-        $course->image = $request->input('image');
-        $course->url = $request->input('url');
-        $course->awardingbody_id = $request->input('awardingbody_id');
-        $course->resoursetype_id = $request->input('resoursetype_id');
+        $course->name = $request->name;
+        $course->image = $request->image;
+        $course->url = $request->url;
+        $course->awardingbody_id = $request->awardingbody_id;
+        $course->resourcetype_id = $request->resourcetype_id;
 
         $course->save();
 

@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AwardingBodyController;
+use App\Http\Controllers\ResourceTypeController;
+use App\Http\Controllers\CourseController;
 
 
 /*
@@ -25,6 +28,51 @@ Route::post('register', [AuthController::class, 'register']);
 //logout
 Route::post('logout', [AuthController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//authenticate api
+Route::middleware('auth:api')->group(function () {
+    
+    //admin
+
+    //awardingbody
+    //add an awarding body
+    Route::middleware(['scope:admin'])->post('/awarding_body', [AwardingBodyController::class, 'addAwardingBody']);
+    //update an awarding body
+    Route::middleware(['scope:admin'])->put('/awarding_body/{id}', [AwardingBodyController::class, 'updateAwardingBody']);
+    //delete an awarding body
+    Route::middleware(['scope:admin'])->delete('/awarding_body/{id}', [AwardingBodyController::class, 'deleteAwardingBody']);
+
+    //resource type
+    //add a resource type
+    Route::middleware(['scope:admin'])->post('/resource_type', [ResourceTypeController::class, 'addResourceType']);
+    //update a resource type
+    Route::middleware(['scope:admin'])->put('/resource_type/{id}', [ResourceTypeController::class, 'updateResourceType']);
+    //delete a resource type
+    Route::middleware(['scope:admin'])->delete('/resource_type/{id}', [ResourceTypeController::class, 'deleteResourceType']);
+
+    //course
+    //add a course
+    Route::middleware(['scope:admin'])->post('/course', [CourseController::class, 'addCourse']);
+    //update a course
+    Route::middleware(['scope:admin'])->put('/course/{id}', [CourseController::class, 'updateCourse']);
+    //delete a course
+    Route::middleware(['scope:admin'])->delete('/course/{id}', [CourseController::class, 'deleteCourse']);
+
+
+    //admin and user routes
+    //get a course
+    Route::middleware(['scope:admin,user'])->get('/course/{id}', [CourseController::class, 'getCourse']);
+
+
+    
 });
+
+//normal api
+
+//get all courses
+Route::get('/courses', [CourseController::class, 'getAllCourses']);
+
+//get all awarding bodies
+Route::get('/awarding_bodies', [AwardingBodyController::class, 'getAllAwardingBodies']);
+
+//get all resource types
+Route::get('/resource_types', [ResourceTypeController::class, 'getAllResourceTypes']);

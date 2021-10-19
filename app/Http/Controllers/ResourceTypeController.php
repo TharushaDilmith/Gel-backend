@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AwardingBody;
+
+use App\Models\ResourceType;
 use Illuminate\Http\Request;
 
 class ResourceTypeController extends Controller
@@ -11,11 +12,11 @@ class ResourceTypeController extends Controller
     public function addResourceType(Request $request)
     {
         $this->validate($request, [
-            'resource_type' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
 
         $resource_type = new ResourceType();
-        $resource_type->resource_type = $request->resource_type;
+        $resource_type->name = $request->name;
         $resource_type->save();
 
         return response()->json(['message' => 'Resource type added successfully'], 200);
