@@ -53,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
     //add a course
     Route::middleware(['scope:admin'])->post('/course', [CourseController::class, 'addCourse']);
     //update a course
-    Route::middleware(['scope:admin'])->put('/course/{id}', [CourseController::class, 'updateCourse']);
+    Route::middleware(['scope:admin'])->put('/course/{id}', [CourseController::class, 'editCourse']);
     //delete a course
     Route::middleware(['scope:admin'])->delete('/course/{id}', [CourseController::class, 'deleteCourse']);
 
@@ -77,5 +77,11 @@ Route::get('/courses', [CourseController::class, 'getCourses']);
 //get all awarding bodies
 Route::get('/awarding_bodies', [AwardingBodyController::class, 'getAllAwardingBodies']);
 
+//get an awarding body
+Route::get('/awarding_body/{id}', [AwardingBodyController::class, 'getAwardingBody']);
+
 //get all resource types
 Route::get('/resource_types', [ResourceTypeController::class, 'getAllResourceTypes']);
+
+//get an resource type
+Route::get('/resource_type/{id}', [ResourceTypeController::class, 'getResourceTypeById']);

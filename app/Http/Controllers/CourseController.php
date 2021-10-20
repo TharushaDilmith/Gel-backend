@@ -2,103 +2,177 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     //add course
     public function addCourse(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'image' => 'required',
-            'url' => 'required',
-            'awardingbody_id' => 'required',
-            'resourcetype_id' => 'required',
-        ]);
+        try {
+            //validate the data
+            $this->validate($request, [
+                'course_name' => 'required',
+                'course_image' => 'required',
+                'course_url' => 'required',
+                'awardingbody_id' => 'required',
+                'resourcetype_id' => 'required',
+            ]);
 
-       
+            //check if the course already exists
+            $course = Course::where('course_name', $request->course_name)->first();
+            if ($course) {
+                return response()->json(['error' => 'Course already exists'], 401);
+            }
 
-        $course = new Course();
-        $course->name = $request->name;
-        $course->image = $request->image;
-        $course->url = $request->url;
-        $course->awardingbody_id = $request->awardingbody_id;
-        $course->resourcetype_id = $request->resourcetype_id;
+            //save the data
+            $course = new Course();
+            $course->course_name = $request->course_name;
+            $course->course_image = $request->course_image;
+            $course->course_url = $request->course_url;
+            $course->awardingbody_id = $request->awardingbody_id;
+            $course->resourcetype_id = $request->resourcetype_id;
 
-        $course->save();
+            //check if saved
+            if ($course->save()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Course added successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Course could not be added',
+                ]);
+            }
 
-        return response()->json(['message' => 'Course Added Successfully']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
     }
 
     //edit course
     public function editCourse(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'image' => 'required',
-            'url' => 'required',
-            'awardingbody_id' => 'required',
-            'resoursetype_id' => 'required',
-        ]);
+        try {
+            //validate the data
+            $this->validate($request, [
+                'course_name' => 'required',
+                'course_image' => 'required',
+                'course_url' => 'required',
+                'awardingbody_id' => 'required',
+                'resourcetype_id' => 'required',
+            ]);
 
-        $course = Course::find($id);
+            $course = Course::find($id);
 
-        //check if course exists before updating
-        if (!isset($course)) {
-            return response()->json(['message' => 'No course found'], 404);
+            //check if course exists before updating
+            if (!isset($course)) {
+                return response()->json(['message' => 'No course found'], 404);
+            }
+
+            //update course
+            $course->course_name = $request->course_name;
+            $course->course_image = $request->course_image;
+            $course->course_url = $request->course_url;
+            $course->awardingbody_id = $request->awardingbody_id;
+            $course->resourcetype_id = $request->resourcetype_id;
+
+            //check if updated
+            if ($course->save()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Course updated successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Course could not be updated',
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
         }
 
-        $course->name = $request->input('name');
-        $course->image = $request->input('image');
-        $course->url = $request->input('url');
-        $course->awardingbody_id = $request->input('awardingbody_id');
-        $course->resoursetype_id = $request->input('resoursetype_id');
-
-        $course->save();
-
-        return response()->json(['success' => 'Course Updated']);
     }
 
     //delete course
     public function deleteCourse($id)
     {
-        $course = Course::find($id);
+        try {
+            //find course
+            $course = Course::find($id);
 
-        //check if course exists before deleting
-        if (!isset($course)) {
-            return response()->json(['error' => 'No Course Found'], 404);
+            //check if course exists before deleting
+            if (!isset($course)) {
+                return response()->json(['error' => 'No Course Found'], 404);
+            }
+
+            //delete course
+            if ($course->delete()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Course deleted successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Course could not be deleted',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
         }
-
-        $course->delete();
-
-        return response()->json(['success' => 'Course Deleted']);
     }
 
     //get all courses
     public function getCourses()
     {
-        $courses = Course::all();
+        try {
 
-        //check if courses exists
-        if (!isset($courses)) {
-            return response()->json(['error' => 'No Courses Found'], 404);
+            //get all courses
+            $courses = Course::all();
+
+            //check if courses exists
+            if (!isset($courses)) {
+                return response()->json(['error' => 'No Courses Found'], 404);
+            }
+
+            //return courses
+            return response()->json($courses);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
         }
 
-        return response()->json($courses);
     }
 
     //get single course
     public function getCourse($id)
     {
-        $course = Course::find($id);
+        try {
+            //find course
+            $course = Course::find($id);
 
-        //check if course exists
-        if (!isset($course)) {
-            return response()->json(['error' => 'No Course Found'], 404);
+            //check if course exists
+            if (!isset($course)) {
+                return response()->json(['error' => 'No Course Found'], 404);
+            }
+
+            //return course
+            return response()->json($course);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
         }
 
-        return response()->json($course); 
     }
 }

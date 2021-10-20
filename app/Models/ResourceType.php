@@ -10,7 +10,7 @@ class ResourceType extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'resource_body_name',
     ];
     //course relationship
     public function courses()

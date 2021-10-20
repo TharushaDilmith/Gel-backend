@@ -10,7 +10,7 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'image', 'url',
+        'course_name', 'course_image', 'course_url',
     ];
 
     //resoursetype relationship

@@ -10,7 +10,7 @@ class AwardingBody extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'awarding_body_name',
     ];
 
     //course relationship
