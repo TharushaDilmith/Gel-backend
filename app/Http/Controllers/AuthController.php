@@ -32,12 +32,13 @@ class AuthController extends Controller
                 //create token
                 $token = $user->createToken($user->email . '_' . now(), [$userRole->role])->accessToken;
 
-                //return response
+                //check role and redirect
+
                 return response()->json(['token' => $token], 200);
 
             } else {
                 //return error
-                return response()->json(['error' => 'Please enter valid username and password!'], 401);
+                return response()->json(['error' => 'Unauthorised'], 403);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -113,6 +114,49 @@ class AuthController extends Controller
                 return response()->json(['error' => 'User could not be created!'], 500);
             }
 
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //admin login
+    public function adminLogin(Request $request)
+    {
+
+        try {
+            //validate incoming request
+            $request->validate([
+                'email' => 'required|string',
+                'password' => 'required|string',
+            ]);
+
+            //request data
+            $credentials = $request->only(['email', 'password']);
+
+            //check credentials
+            if (auth()->attempt($credentials)) {
+                $user = auth()->user();
+
+                //add role to user
+                $userRole = $user->role()->first();
+
+                if($userRole->role == 'admin'){
+                    //create token
+                    $token = $user->createToken($user->email . '_' . now(), [$userRole->role])->accessToken;
+
+                    //check role and redirect
+
+                    return response()->json(['token' => $token], 200);
+                }else{
+                    return response()->json(['error' => 'You are not authorized to login!'], 500);
+                }
+
+            } else {
+                //return error
+                return response()->json(['error' => 'Please enter valid username and password!'], 403);
+            }
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['error' => $th->getMessage()], 500);

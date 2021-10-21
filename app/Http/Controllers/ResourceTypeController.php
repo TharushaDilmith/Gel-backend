@@ -65,7 +65,7 @@ class ResourceTypeController extends Controller
                 return response()->json(['message' => 'No resource types found'], 404);
             }
             //return resource types
-            return response()->json(['resource_types' => $resource_types], 200);
+            return response()->json($resource_types, 200);
 
         } catch (\Throwable $th) {
             //throw $th;

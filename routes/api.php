@@ -22,6 +22,9 @@ use App\Http\Controllers\CourseController;
 //login
 Route::post('login', [AuthController::class, 'login']);
 
+//admin login
+Route::post('admin/login', [AuthController::class, 'adminLogin']);
+
 //register
 Route::post('register', [AuthController::class, 'register']);
 
