@@ -10,19 +10,13 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_name', 'course_image', 'course_url',
+        'course_name', 
     ];
 
-    //resoursetype relationship
-    public function resoursetypes()
-    {
-        return $this->belongsTo('App\Models\Resoursetype');
-    }
 
-    //awardingbody relationship
-    public function awardingbodies()
+    //course relationship
+    public function resources()
     {
-        return $this->belongsTo('App\Models\Awardingbody');
+        return $this->hasMany('App\Models\Resources');
     }
-
 }

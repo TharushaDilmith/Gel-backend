@@ -34,11 +34,22 @@ class AuthController extends Controller
 
                 //check role and redirect
 
-                return response()->json(['token' => $token], 200);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Login Successful',
+                    'data' => [
+                        'user' => $user,
+                        'token' => $token,
+                    ],
+                ], 200);
 
             } else {
                 //return error
-                return response()->json(['error' => 'Unauthorised'], 403);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid Credentials',
+                ], 200);
+
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -107,11 +118,18 @@ class AuthController extends Controller
                 Mail::to($request->email)->send(new \App\Mail\UserMail($userDetails));
 
                 //return response
-                return response()->json(['message' => 'User created successfully!'], 200);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'User  registered successfully, Please login to continue',
+                    'data' => $user,
+                ], 200);
 
             } else {
                 //return error
-                return response()->json(['error' => 'User could not be created!'], 500);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User could not be created',
+                ], 200);
             }
 
         } catch (\Throwable $th) {
@@ -142,20 +160,35 @@ class AuthController extends Controller
                 //add role to user
                 $userRole = $user->role()->first();
 
-                if($userRole->role == 'admin'){
+                if ($userRole->role == 'admin') {
                     //create token
                     $token = $user->createToken($user->email . '_' . now(), [$userRole->role])->accessToken;
 
                     //check role and redirect
 
-                    return response()->json(['token' => $token], 200);
-                }else{
-                    return response()->json(['error' => 'You are not authorized to login!'], 500);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Login Successful',
+                        'data' => [
+                            'user' => $user,
+                            'token' => $token,
+                        ],
+                    ], 200);
+                } else {
+                    //return error
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'UnAuthorized',
+                    ], 200);
+
                 }
 
             } else {
                 //return error
-                return response()->json(['error' => 'Please enter valid username and password!'], 403);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid Credentials',
+                ], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;

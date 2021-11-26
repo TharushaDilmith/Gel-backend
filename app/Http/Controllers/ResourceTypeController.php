@@ -35,13 +35,13 @@ class ResourceTypeController extends Controller
             //check if resource type was created
             if ($resource_type) {
                 return response()->json([
-                    'status' => 'success',
+                    'success' => true,
                     'message' => 'Resource type created successfully',
                     'resource_type' => $resource_type,
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 'error',
+                    'success' => false,
                     'message' => 'Error creating resource type',
                 ], 500);
             }
@@ -109,7 +109,9 @@ class ResourceTypeController extends Controller
 
             //check if resource type exist
             if (!$resource_type) {
-                return response()->json(['message' => 'Resource type not found'], 404);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Resource type not found'], 200);
             }
 
             $resource_type->resource_type_name = $request->resource_type_name;
@@ -118,13 +120,13 @@ class ResourceTypeController extends Controller
             //check if resource type was updated
             if ($resource_type) {
                 return response()->json([
-                    'status' => 'success',
+                    'success' => true,
                     'message' => 'Resource type updated successfully',
                     'resource_type' => $resource_type,
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 'error',
+                    'success' => false,
                     'message' => 'Error updating resource type',
                 ], 500);
             }
@@ -152,7 +154,9 @@ class ResourceTypeController extends Controller
             $resource_type->delete();
 
             //return success message
-            return response()->json(['message' => 'Resource type deleted successfully'], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Resource type deleted successfully'], 200);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['status' => 'error', 'message' => $th->getMessage()]);

@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AwardingBodyController;
-use App\Http\Controllers\ResourceTypeController;
 use App\Http\Controllers\CourseController;
-
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\ResourceTypeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +16,7 @@ use App\Http\Controllers\CourseController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 //login
 Route::post('login', [AuthController::class, 'login']);
@@ -33,7 +32,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 
 //authenticate api
 Route::middleware('auth:api')->group(function () {
-    
+
     //admin
 
     //awardingbody
@@ -60,16 +59,26 @@ Route::middleware('auth:api')->group(function () {
     //delete a course
     Route::middleware(['scope:admin'])->delete('/course/{id}', [CourseController::class, 'deleteCourse']);
 
+    //resource
+    //add a resource
+    Route::middleware(['scope:admin'])->post('/resource', [ResourceController::class, 'addResource']);
+    //update a resource
+    Route::middleware(['scope:admin'])->put('/resource/{id}', [ResourceController::class, 'editResource']);
+    //delete a resource
+    Route::middleware(['scope:admin'])->delete('/resource/{id}', [ResourceController::class, 'deleteResource']);
+    
 
     //admin and user routes
     //get a course
     Route::middleware(['scope:admin,user'])->get('/course/{id}', [CourseController::class, 'getCourse']);
 
+    //get a resource
+    Route::middleware(['scope:admin,user'])->get('/resources/{id}', [ResourceController::class, 'getResource']);
+
     //logout
     Route::middleware(['scope:admin,user'])->post('logout', [AuthController::class, 'logout']);
 
 
-    
 });
 
 //normal api
@@ -88,3 +97,6 @@ Route::get('/resource_types', [ResourceTypeController::class, 'getAllResourceTyp
 
 //get an resource type
 Route::get('/resource_type/{id}', [ResourceTypeController::class, 'getResourceTypeById']);
+
+//get all resources
+Route::get('/resources', [ResourceController::class, 'getResources']);

@@ -15,7 +15,7 @@ class ResourceType extends Model
     //course relationship
     public function courses()
     {
-        return $this->hasMany('App\Models\Course');
+        return $this->hasMany('App\Models\Resources');
     }
 
 }

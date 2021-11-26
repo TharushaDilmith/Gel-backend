@@ -16,15 +16,8 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('course_name');
-            $table->string('course_image');
-            $table->string('course_url');
-            $table->unsignedBigInteger('awardingbody_id');
-            $table->unsignedBigInteger('resourcetype_id');
+            
             $table->timestamps();
-
-            //foreign keies
-            $table->foreign('awardingbody_id')->references('id')->on('awarding_bodies');
-            $table->foreign('resourcetype_id')->references('id')->on('resource_types');
         });
     }
 
