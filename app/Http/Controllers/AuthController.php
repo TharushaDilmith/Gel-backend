@@ -83,7 +83,7 @@ class AuthController extends Controller
                 'lastname' => 'required|string',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string',
-                'c_password' => 'required|string|same:password',
+                // 'c_password' => 'required|string|same:password',
             ]);
 
             //create new user
