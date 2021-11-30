@@ -123,11 +123,6 @@ class CourseController extends Controller
             //get all courses
             $courses = Course::all();
 
-            //check if courses exists
-            if (!isset($courses)) {
-                return response()->json(['error' => 'No Courses Found'], 404);
-            }
-
             //return courses
             return response()->json($courses);
 
@@ -159,4 +154,162 @@ class CourseController extends Controller
         }
 
     }
+
+    //get a deleted course
+    public function getDeletedCourse($id)
+    {
+        try {
+            //find course
+            $course = Course::withTrashed()->find($id);
+
+            //check if course exists
+            if (!isset($course)) {
+                return response()->json(['error' => 'No Course Found'], 404);
+            }
+
+            //return course
+            return response()->json($course);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //get deleted courses
+    public function getAllDeletedCourses()
+    {
+        try {
+
+            //get all courses
+            $courses = Course::onlyTrashed()->get();
+
+            //return courses
+            return response()->json($courses);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //restore course
+    public function restoreCourse($id)
+    {
+        try {
+            //find course
+            $course = Course::withTrashed()->find($id)->restore();
+
+            //check if course exists
+            if (!isset($course)) {
+                return response()->json(['error' => 'No Course Found'], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Course restored successfully',
+            ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+    //restore all courses
+    public function restoreAllCourses()
+    {
+        try {
+
+            //get all courses
+            $courses = Course::onlyTrashed()->restore();
+
+            //return courses
+            return response()->json([
+                'success' => true,
+                'message' => 'All courses restored successfully',
+            ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete permanently course
+    public function deletePermanentlyCourse($id)
+    {
+        try {
+            //find course
+            $course = Course::withTrashed()->find($id);
+
+            //check if course exists
+            if (!isset($course)) {
+                return response()->json(['error' => 'No Course Found'], 404);
+            }
+
+            //delete permanently course
+            if ($course->forceDelete()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Course deleted permanently',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Course could not be deleted permanently',
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete all courses permanently
+    public function deletePermanentlyAllCourses()
+    {
+        try {
+
+            //get all courses
+            $courses = Course::onlyTrashed()->get();
+
+            //delete all courses permanently
+            foreach ($courses as $course) {
+                $course->forceDelete();
+            }
+
+            //return courses
+            return response()->json($courses);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //get all courses with deleted
+    public function getAllCourses()
+    {
+        try {
+
+            //get all courses
+            $courses = Course::withTrashed()->get();
+
+            //return courses
+            return response()->json($courses);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
 }

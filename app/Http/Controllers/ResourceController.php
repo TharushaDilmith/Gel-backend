@@ -143,11 +143,6 @@ class ResourceController extends Controller
             //get all resources
             $resources = Resources::all();
 
-            //check if resources exists
-            if (!isset($resources)) {
-                return response()->json(['error' => 'No Resources Found'], 404);
-            }
-
             //return resources
             return response()->json($resources);
 
@@ -185,4 +180,183 @@ class ResourceController extends Controller
         }
 
     }
+
+    //get a deleted resource
+    public function getDeletedResource($id)
+    {
+        try {
+            //find resource
+            $resource = Resources::onlyTrashed()->find($id);
+
+            //check if resource exists
+            if (!isset($resource)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No resource found',
+                ], 200);
+            }
+
+            //return resource
+            return response()->json([
+                'success' => true,
+                'resource' => $resource,
+            ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //get all deleted resources
+    public function getAllDeletedResources()
+    {
+        try {
+
+            //get all resources
+            $resources = Resources::onlyTrashed()->get();
+
+            //return resources
+            return response()->json($resources);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //restore resource
+    public function restoreResource($id)
+    {
+        try {
+            //find resource
+            $resource = Resources::onlyTrashed()->find($id)->restore();
+
+            //check if resource exists
+            if (!isset($resource)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No resource found',
+                ], 200);
+            }
+
+            //restore resource
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Resource restored successfully',
+            ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //restore all resources
+    public function restoreAllResources()
+    {
+        try {
+
+            //restore all resources
+            if (Resources::onlyTrashed()->restore()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'All resources restored successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'All resources could not be restored',
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete resource permanently
+    public function deletePermanentlyResource($id)
+    {
+        try {
+            //find resource
+            $resource = Resources::onlyTrashed()->find($id);
+
+            //check if resource exists
+            if (!isset($resource)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No resource found',
+                ], 200);
+            }
+
+            //delete resource permanently
+            if ($resource->forceDelete()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Resource deleted permanently',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Resource could not be deleted permanently',
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete all resources permanently
+    public function deletePermanentlyAllResources()
+    {
+        try {
+
+            //delete all resources permanently
+            if (Resources::onlyTrashed()->forceDelete()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'All resources deleted permanently',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'All resources could not be deleted permanently',
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //get resources with deleted
+    public function getResourcesWithDeleted()
+    {
+        try {
+
+            //get all resources
+            $resources = Resources::withTrashed()->get();
+
+            //return resources
+            return response()->json($resources);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
 }

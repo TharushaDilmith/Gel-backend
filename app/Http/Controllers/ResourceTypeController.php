@@ -60,10 +60,6 @@ class ResourceTypeController extends Controller
             //get all resource types
             $resource_types = ResourceType::all();
 
-            //check if resource types exist
-            if ($resource_types->isEmpty()) {
-                return response()->json(['message' => 'No resource types found'], 404);
-            }
             //return resource types
             return response()->json($resource_types, 200);
 
@@ -143,7 +139,7 @@ class ResourceTypeController extends Controller
     {
         try {
             //get resource type by id
-            $resource_type = ResourceType::find($id);
+            $resource_type = ResourceType::findOrFail($id);
 
             //check if resource type exist
             if (!$resource_type) {
@@ -163,4 +159,135 @@ class ResourceTypeController extends Controller
         }
 
     }
+
+    //get a deleted resource type
+    public function getDeletedResourceType($id)
+    {
+        try {
+            //get resource type by id
+            $resource_type = ResourceType::onlyTrashed()->find($id);
+
+            //check if resource type exist
+            if (!$resource_type) {
+                return response()->json(['message' => 'Resource type not found'], 404);
+            }
+
+            //return resource type
+            return response()->json(['resource_type' => $resource_type], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
+    //get deleted resource types
+    public function getAllDeletedResourceTypes()
+    {
+        try {
+            //get all deleted resource types
+            $resource_types = ResourceType::onlyTrashed()->get();
+
+            //check if resource types exist
+            if (!$resource_types) {
+                return response()->json(['message' => 'No deleted resource types found'], 404);
+            }
+
+            //return resource types
+            return response()->json(['resource_types' => $resource_types], 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
+    //restore resource type
+    public function restoreResourceType($id)
+    {
+        try {
+            //get resource type by id
+            $resource_type = ResourceType::onlyTrashed()->findOrFail($id)->restore();
+
+            //check if resource type exist
+            if (!$resource_type) {
+                return response()->json(['message' => 'Resource type not found'], 404);
+            }
+
+            //return success message
+            return response()->json([
+                'success' => true,
+                'message' => 'Resource type restored successfully'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
+    //restore all resource types
+    public function restoreAllResourceTypes()
+    {
+        try {
+            //restore all resource types
+            ResourceType::onlyTrashed()->restore();
+
+            //return success message
+            return response()->json([
+                'success' => true,
+                'message' => 'All resource types restored successfully'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
+    //delete resource type permanently
+
+    public function deleteResourceTypePermanently($id)
+    {
+        try {
+            //get resource type by id
+            $resource_type = ResourceType::onlyTrashed()->findOrFail($id);
+
+            //check if resource type exist
+            if (!$resource_type) {
+                return response()->json(['message' => 'Resource type not found'], 404);
+            }
+
+            //delete resource type permanently
+            $resource_type->forceDelete();
+
+            //return success message
+            return response()->json([
+                'success' => true,
+                'message' => 'Resource type deleted permanently'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
+    //delete all resource types permanently
+    public function deleteAllResourceTypesPermanently()
+    {
+        try {
+            //delete all resource types permanently
+            ResourceType::onlyTrashed()->forceDelete();
+
+            //return success message
+            return response()->json([
+                'success' => true,
+                'message' => 'All resource types deleted permanently'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
+
+    }
+
 }

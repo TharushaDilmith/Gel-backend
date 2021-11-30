@@ -51,11 +51,6 @@ class AwardingBodyController extends Controller
             //get all AwardingBodies
             $awarding_bodies = AwardingBody::all();
 
-            //check if there are any awarding bodies
-            if (count($awarding_bodies) == 0) {
-                return response()->json(['message' => 'No Awarding Bodies Found'], 404);
-            }
-
             //return all awarding bodies
             return response()->json($awarding_bodies, 200);
 
@@ -127,7 +122,6 @@ class AwardingBodyController extends Controller
             //delete the awarding body
             $awarding_body->delete();
 
-            
             //return the deleted awarding body
             return response()->json(['success' => true, 'message' => 'Awarding Body Deleted Successfully']);
 
@@ -137,4 +131,126 @@ class AwardingBodyController extends Controller
         }
 
     }
+    //get a deleted awarding body
+    public function getDeletedAwardingBody($id)
+    {
+        try {
+            //get an AwardingBody
+            $awarding_body = AwardingBody::onlyTrashed()->find($id);
+
+            //check if awarding body exists
+            if (is_null($awarding_body)) {
+                return response()->json(["message" => "Awarding Body with id $id not found"], 404);
+            }
+            //return the deleted awarding body
+            return response()->json($awarding_body, 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //get deleted awarding bodies
+    public function getAllDeletedAwardingBodies()
+    {
+        try {
+            //get all deleted AwardingBodies
+            $awarding_bodies = AwardingBody::onlyTrashed()->get();
+
+            //return all deleted awarding bodies
+            return response()->json($awarding_bodies, 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //restore an awarding body
+    public function restoreAwardingBody($id)
+    {
+        try {
+            //get an AwardingBody
+            $awarding_body = AwardingBody::onlyTrashed()->find($id)->restore();
+
+            //check if awarding body exists
+            if (is_null($awarding_body)) {
+                return response()->json(["message" => "Awarding Body with id $id not found"], 404);
+            }
+
+            //return the restored awarding body
+            return response()->json(['success' => true, 'message' => 'Awarding Body Restored Successfully']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+    //restore all deleted awarding bodies
+    public function restoreAllDeletedAwardingBodies()
+    {
+        try {
+            //get all deleted AwardingBodies
+            $awarding_bodies = AwardingBody::onlyTrashed()->restore();
+
+            
+            //return all deleted awarding bodies
+            return response()->json(['success' => true, 'message' => 'All Awarding Bodies Restored Successfully']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete an awarding body permanently
+    public function deleteAwardingBodyPermanently($id)
+    {
+        try {
+            //get an AwardingBody
+            $awarding_body = AwardingBody::onlyTrashed()->find($id);
+
+            //check if awarding body exists
+            if (is_null($awarding_body)) {
+                return response()->json(["message" => "Awarding Body with id $id not found"], 404);
+            }
+
+            //delete the awarding body permanently
+            $awarding_body->forceDelete();
+
+            //return the deleted awarding body
+            return response()->json(['success' => true, 'message' => 'Awarding Body Deleted Permanently']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //delete all deleted awarding bodies permanently
+    public function deleteAllDeletedAwardingBodiesPermanently()
+    {
+        try {
+            //get all deleted AwardingBodies
+            $awarding_bodies = AwardingBody::onlyTrashed()->get();
+
+            //delete all deleted awarding bodies permanently
+            $awarding_bodies->forceDelete();
+
+            //return all deleted awarding bodies
+            return response()->json(['success' => true, 'message' => 'All Awarding Bodies Deleted Permanently']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
 }

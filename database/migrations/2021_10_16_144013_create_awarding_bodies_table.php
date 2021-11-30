@@ -17,6 +17,9 @@ class CreateAwardingBodiesTable extends Migration
             $table->id();
             $table->string('awarding_body_name');
             $table->timestamps();
+
+            //soft delete
+            $table->softDeletes();
         });
     }
 

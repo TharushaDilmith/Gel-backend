@@ -27,6 +27,9 @@ class CreateResourcesTable extends Migration
             $table->foreign('awardingbody_id')->references('id')->on('awarding_bodies');
             $table->foreign('resourcetype_id')->references('id')->on('resource_types');
             $table->foreign('course_id')->references('id')->on('courses');
+
+            //soft delete
+            $table->softDeletes();
         });
     }
 

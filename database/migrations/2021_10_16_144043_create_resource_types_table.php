@@ -17,6 +17,9 @@ class CreateResourceTypesTable extends Migration
             $table->id();
             $table->string('resource_type_name');
             $table->timestamps();
+
+            //soft delete
+            $table->softDeletes();
         });
     }
 
