@@ -14,10 +14,19 @@ class AuthController extends Controller
 
         try {
             //validate incoming request
-            $request->validate([
+            // $request->validate([
+            //     'email' => 'required|string',
+            //     'password' => 'required|string',
+            // ]);
+
+            //validate and return errors
+            $validator = \Validator::make($request->all(), [
                 'email' => 'required|string',
                 'password' => 'required|string',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first(), 'status' => false], 200);
+            }
 
             //request data
             $credentials = $request->only(['email', 'password']);
@@ -35,7 +44,7 @@ class AuthController extends Controller
                 //check role and redirect
 
                 return response()->json([
-                    'status' => 'success',
+                    'success' => true,
                     'message' => 'Login Successful',
                     'data' => [
                         'user' => $user,
@@ -46,14 +55,17 @@ class AuthController extends Controller
             } else {
                 //return error
                 return response()->json([
-                    'status' => 'error',
+                    'success' => false,
                     'message' => 'Invalid Credentials',
                 ], 200);
 
             }
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json(['error' => $th->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()], 200);
+                
         }
 
     }
@@ -64,12 +76,15 @@ class AuthController extends Controller
             //revoke token
             $request->user()->token()->revoke();
             return response()->json([
+                'success' => true,
                 'message' => 'Successfully logged out',
             ]);
 
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json(['error' => $th->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'error' => $th->getMessage()], 200);
         }
 
     }
@@ -78,13 +93,25 @@ class AuthController extends Controller
     {
         try {
             //validate incoming request
-            $request->validate([
+            // $request->validate([
+            //     'firstname' => 'required|string',
+            //     'lastname' => 'required|string',
+            //     'email' => 'required|string|email|unique:users',
+            //     'password' => 'required|string',
+            //     // 'c_password' => 'required|string|same:password',
+            // ]);
+
+            //validate and return errors
+            $validator = \Validator::make($request->all(), [
                 'firstname' => 'required|string',
                 'lastname' => 'required|string',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string',
-                // 'c_password' => 'required|string|same:password',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 200);
+            }
+
 
             //create new user
             $user = User::create([
@@ -117,24 +144,52 @@ class AuthController extends Controller
 
                 Mail::to($request->email)->send(new \App\Mail\UserMail($userDetails));
 
-                //return response
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'User  registered successfully, Please login to continue',
-                    'data' => $user,
-                ], 200);
+                //login user
+                $credentials = $request->only(['email', 'password']);
+
+                //check credentials
+                if (auth()->attempt($credentials)) {
+                    $user = auth()->user();
+
+                    //add role to user
+                    $userRole = $user->role()->first();
+
+                    //create token
+                    $token = $user->createToken($user->email . '_' . now(), [$userRole->role])->accessToken;
+
+                    //check role and redirect
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Registration Successful',
+                        'data' => [
+                            'user' => $user,
+                            'token' => $token,
+                        ],
+                    ], 200);
+
+                } else {
+                    //return error
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Invalid Credentials',
+                    ], 200);
+
+                }
 
             } else {
                 //return error
                 return response()->json([
-                    'status' => 'error',
+                    'success' => false,
                     'message' => 'User could not be created',
                 ], 200);
             }
 
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json(['error' => $th->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()], 200);
         }
 
     }
