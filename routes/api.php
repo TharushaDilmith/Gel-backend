@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AwardingBodyController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\ResourceTypeController;
@@ -34,6 +35,13 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::middleware('auth:api')->group(function () {
 
     //admin
+
+    //brands
+    //get all brands
+    Route::middleware(['scope:admin'])->get('/brands', [BrandController::class, 'index']);
+    //add a brand
+    Route::middleware(['scope:admin'])->post('/brands', [BrandController::class, 'create']);
+
 
     //awardingbody
     //add an awarding body
