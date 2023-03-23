@@ -43,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->post('/brands', [BrandController::class, 'create']);
     //update an awarding body
     Route::middleware(['scope:admin'])->put('/brands/{id}', [BrandController::class, 'update']);
+    //get a deleted awarding body
+    Route::middleware(['scope:admin'])->delete('/brands/{id}', [BrandController::class, 'delete']);
 
     //awardingbody
     //add an awarding body
