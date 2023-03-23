@@ -45,59 +45,22 @@ class BrandController extends Controller
         ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    //update brand
+    public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function show(brand $brand)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(brand $brand)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, brand $brand)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(brand $brand)
-    {
-        //
+        // update brand with backend validation
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'status' => false], 200);
+        }
+        $brand = brand::find($id);
+        $brand->update($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand Successfully Updated',
+            'data' => $brand,
+        ], 200);
     }
 }
