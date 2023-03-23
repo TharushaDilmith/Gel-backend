@@ -15,7 +15,7 @@ class BrandController extends Controller
     public function index()
     {
         // get all brands
-        $brands = brand::all();
+        $brands = Brand::all();
         return response()->json([
             'success' => true,
             'message' => 'All Brands Successfully Fetched',
@@ -28,9 +28,21 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // save brand with backend validation
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(), 'status' => false], 200);
+        }
+        $brand = brand::create($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand Successfully Created',
+            'data' => $brand,
+        ], 200);
     }
 
     /**
