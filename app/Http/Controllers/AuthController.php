@@ -65,7 +65,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $th->getMessage()], 200);
-                
+
         }
 
     }
@@ -92,14 +92,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            //validate incoming request
-            // $request->validate([
-            //     'firstname' => 'required|string',
-            //     'lastname' => 'required|string',
-            //     'email' => 'required|string|email|unique:users',
-            //     'password' => 'required|string',
-            //     // 'c_password' => 'required|string|same:password',
-            // ]);
 
             //validate and return errors
             $validator = \Validator::make($request->all(), [
@@ -107,6 +99,8 @@ class AuthController extends Controller
                 'lastname' => 'required|string',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string',
+                'phone' => 'required|string',
+                'confirmPassword' => 'required|string|same:password',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first()], 200);
@@ -132,17 +126,17 @@ class AuthController extends Controller
                     'email' => $user->email,
                 ];
 
-                Mail::to('tharushadilmith99@gmail.com')->send(new \App\Mail\AdminMail($adminMailDetials));
+//                Mail::to('tharushadilmith99@gmail.com')->send(new \App\Mail\AdminMail($adminMailDetials));
 
                 //send mail to user
-                $userDetails = [
-                    'email' => $request->email,
-                    'subject' => 'Welcome to GEL',
-                    'name' => $request->firstname,
-                    'message' => 'You have successfully registered to GEL. Please login to continue.',
-                ];
-
-                Mail::to($request->email)->send(new \App\Mail\UserMail($userDetails));
+//                $userDetails = [
+//                    'email' => $request->email,
+//                    'subject' => 'Welcome to GEL',
+//                    'name' => $request->firstname,
+//                    'message' => 'You have successfully registered to GEL. Please login to continue.',
+//                ];
+//
+//                Mail::to($request->email)->send(new \App\Mail\UserMail($userDetails));
 
                 //login user
                 $credentials = $request->only(['email', 'password']);

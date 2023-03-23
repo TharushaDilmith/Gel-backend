@@ -25,7 +25,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('admin/login', [AuthController::class, 'adminLogin']);
 
 //register
-Route::post('register', [AuthController::class, 'register']);
+Route::post('admin/register', [AuthController::class, 'register']);
 
 //logout
 Route::post('logout', [AuthController::class, 'logout']);
