@@ -41,8 +41,15 @@ class BrandController extends Controller
                 'name' => 'required|string',
             ]);
             if ($validator->fails()) {
-                return response()->json(['message' => $validator->errors()->first(), 'status' => false], 200);
+                return response()->json(['message' => $validator->errors()->first(), 'success' => false], 200);
             }
+
+            //check whether brand exists by name
+            $brand = brand::where('name', $request->name)->first();
+            if ($brand) {
+                return response()->json(['message' => 'Brand already exists','success' => false], 200);
+            }
+
             $brand = brand::create($request->all());
             return response()->json([
                 'success' => true,
@@ -66,6 +73,13 @@ class BrandController extends Controller
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first(), 'status' => false], 200);
             }
+
+            //check whether brand exists by name
+            $brand = brand::where('name', $request->name)->first();
+            if ($brand) {
+                return response()->json(['message' => 'Brand already exists','success' => false,], 200);
+            }
+
             $brand = brand::find($id);
             $brand->update($request->all());
             return response()->json([
