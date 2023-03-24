@@ -108,4 +108,21 @@ class BrandController extends Controller
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
+
+    //get deleted awarding bodies
+    public function getAllDeletedBrands()
+    {
+        try {
+            //get all deleted AwardingBodies
+            $brands = Brand::onlyTrashed()->get();
+
+            //return all deleted awarding bodies
+            return response()->json($brands, 200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
 }

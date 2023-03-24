@@ -41,10 +41,12 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->get('/brands', [BrandController::class, 'index']);
     //add a brand
     Route::middleware(['scope:admin'])->post('/brands', [BrandController::class, 'create']);
-    //update an awarding body
+    //update a brand
     Route::middleware(['scope:admin'])->put('/brands/{id}', [BrandController::class, 'update']);
-    //get a deleted awarding body
+    //delete a brand
     Route::middleware(['scope:admin'])->delete('/brands/{id}', [BrandController::class, 'delete']);
+    //get all deleted brands
+    Route::middleware(['scope:admin'])->get('/brands/deleted', [BrandController::class, 'getAllDeletedBrands']);
 
     //awardingbody
     //add an awarding body
