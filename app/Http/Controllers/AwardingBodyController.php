@@ -14,11 +14,12 @@ class AwardingBodyController extends Controller
 
             //validate incoming request
             $this->validate($request, [
-                'awarding_body_name' => 'required',
+                'awarding_body_name' => 'required|string',
+                'brand' => 'required|integer',
             ]);
 
             //check if AwardingBody already exists
-            $awarding_body = AwardingBody::where('awarding_body_name', $request->awarding_body_name)->first();
+            $awarding_body = AwardingBody::where('awarding_body_name', $request->awarding_body_name)->where('brand', $request->brand)->first();
             if ($awarding_body) {
                 return response()->json(['error' => 'AwardingBody already exists'], 401);
             }
@@ -26,6 +27,7 @@ class AwardingBodyController extends Controller
             //create AwardingBody
             $awardingBody = new AwardingBody();
             $awardingBody->awarding_body_name = $request->awarding_body_name;
+            $awardingBody->brand = $request->brand;
 
             //save AwardingBody
             $awardingBody->save();
@@ -131,6 +133,7 @@ class AwardingBodyController extends Controller
         }
 
     }
+
     //get a deleted awarding body
     public function getDeletedAwardingBody($id)
     {
@@ -190,6 +193,7 @@ class AwardingBodyController extends Controller
         }
 
     }
+
     //restore all deleted awarding bodies
     public function restoreAllDeletedAwardingBodies()
     {
@@ -197,7 +201,7 @@ class AwardingBodyController extends Controller
             //get all deleted AwardingBodies
             $awarding_bodies = AwardingBody::onlyTrashed()->restore();
 
-            
+
             //return all deleted awarding bodies
             return response()->json(['success' => true, 'message' => 'All Awarding Bodies Restored Successfully']);
 

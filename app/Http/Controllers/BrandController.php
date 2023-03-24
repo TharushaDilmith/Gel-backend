@@ -38,7 +38,7 @@ class BrandController extends Controller
         try {
             // save brand with backend validation
             $validator = \Validator::make($request->all(), [
-                'name' => 'required|string',
+                'name' => 'required|string'
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()->first(), 'success' => false], 200);
