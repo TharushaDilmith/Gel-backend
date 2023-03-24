@@ -12,11 +12,18 @@ class AwardingBody extends Model
 
     protected $fillable = [
         'awarding_body_name',
+        'brand'
     ];
 
     //course relationship
     public function courses()
     {
         return $this->hasMany('App\Models\Resources');
+    }
+
+    //brand relationship
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
     }
 }

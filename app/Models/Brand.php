@@ -11,4 +11,9 @@ class Brand extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'brands';
     protected $fillable = ['name'];
+
+    public function awardingBodies()
+    {
+        return $this->hasMany(AwardingBody::class);
+    }
 }
