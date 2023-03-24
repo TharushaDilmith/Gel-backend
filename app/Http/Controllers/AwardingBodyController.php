@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AwardingBody;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
 class AwardingBodyController extends Controller
@@ -53,6 +54,19 @@ class AwardingBodyController extends Controller
             //get all AwardingBodies
             $awarding_bodies = AwardingBody::all();
 
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to awarding body
+            foreach ($awarding_bodies as $awarding_body) {
+                foreach ($brands as $brand) {
+                    if ($awarding_body->brand == $brand->id) {
+                        $awarding_body->brand_name = $brand->name;
+                    }
+                }
+            }
+
+
             //return all awarding bodies
             return response()->json($awarding_bodies, 200);
 
@@ -69,6 +83,10 @@ class AwardingBodyController extends Controller
         try {
             //get an AwardingBody
             $awarding_body = AwardingBody::find($id);
+
+            // add brand name to awarding body
+            $brand = Brand::find($awarding_body->brand);
+            $awarding_body->brand_name = $brand->name;
 
             //check if awarding body exists
             if (is_null($awarding_body)) {
