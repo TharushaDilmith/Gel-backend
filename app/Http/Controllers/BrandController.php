@@ -125,4 +125,44 @@ class BrandController extends Controller
         }
 
     }
+
+    //restore all deleted brands
+    public function restoreAllDeletedBrands()
+    {
+        try {
+            //get all deleted brands
+            $brands = Brand::onlyTrashed()->restore();
+
+
+            //return all deleted brands
+            return response()->json(['success' => true, 'message' => 'All Brands Restored Successfully']);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
+
+    //restore a brand
+    public function restoreBrand($id)
+    {
+        try {
+            //get an AwardingBody
+            $brand = Brand::onlyTrashed()->find($id)->restore();
+
+            //check if awarding body exists
+            if (is_null($brand)) {
+                return response()->json(["message" => "Brand with id $id not found",'success' => true,], 404);
+            }
+
+            //return the restored awarding body
+            return response()->json(['success' => true, 'message' => 'Brand Restored Successfully'],200);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
+    }
 }
