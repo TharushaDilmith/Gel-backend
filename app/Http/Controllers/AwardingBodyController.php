@@ -159,6 +159,10 @@ class AwardingBodyController extends Controller
             //get an AwardingBody
             $awarding_body = AwardingBody::onlyTrashed()->find($id);
 
+            // add brand name to awarding body
+            $brand = Brand::find($awarding_body->brand);
+            $awarding_body->brand_name = $brand->name;
+
             //check if awarding body exists
             if (is_null($awarding_body)) {
                 return response()->json(["message" => "Awarding Body with id $id not found"], 404);
@@ -179,6 +183,18 @@ class AwardingBodyController extends Controller
         try {
             //get all deleted AwardingBodies
             $awarding_bodies = AwardingBody::onlyTrashed()->get();
+
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to awarding body
+            foreach ($awarding_bodies as $awarding_body) {
+                foreach ($brands as $brand) {
+                    if ($awarding_body->brand == $brand->id) {
+                        $awarding_body->brand_name = $brand->name;
+                    }
+                }
+            }
 
             //return all deleted awarding bodies
             return response()->json($awarding_bodies, 200);
