@@ -47,6 +47,10 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->delete('/brands/{id}', [BrandController::class, 'delete']);
     //get all deleted brands
     Route::middleware(['scope:admin'])->get('/brands/deleted', [BrandController::class, 'getAllDeletedBrands']);
+    //restore all deleted brands
+    Route::middleware(['scope:admin'])->post('/brands/restore/', [BrandController::class, 'restoreAllDeletedBrands']);
+    //restore a brand
+    Route::middleware(['scope:admin'])->post('/brands/restore/{id}', [BrandController::class, 'restoreBrand']);
 
     //awardingbody
     //add an awarding body
