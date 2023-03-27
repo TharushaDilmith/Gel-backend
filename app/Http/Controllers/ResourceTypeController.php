@@ -15,10 +15,16 @@ class ResourceTypeController extends Controller
             //validate request
             $this->validate($request, [
                 'resource_type_name' => 'required|string|max:255',
+                'brand' => 'required|integer',
+                'awarding_body' => 'required|integer',
             ]);
 
             //check if resource type already exists
-            $resourceType = ResourceType::where('resource_type_name', $request->resource_type_name)->first();
+            $resourceType = ResourceType::
+            where('resource_type_name', $request->resource_type_name)
+                ->where('brand', $request->brand)
+                ->where('awarding_body', $request->awarding_body)
+                ->first();
 
             if ($resourceType) {
                 return response()->json([
@@ -30,6 +36,9 @@ class ResourceTypeController extends Controller
             //create resource type
             $resource_type = new ResourceType();
             $resource_type->resource_type_name = $request->resource_type_name;
+            $resource_type->brand = $request->brand;
+            $resource_type->awarding_body = $request->awarding_body;
+            $resource_type->validity = $request->validity;
             $resource_type->save();
 
             //check if resource type was created
