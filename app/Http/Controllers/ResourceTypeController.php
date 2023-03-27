@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AwardingBody;
+use App\Models\Brand;
 use App\Models\ResourceType;
 use Illuminate\Http\Request;
 
@@ -68,6 +70,30 @@ class ResourceTypeController extends Controller
         try {
             //get all resource types
             $resource_types = ResourceType::all();
+
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to resource type
+            foreach ($resource_types as $resource_type) {
+                foreach ($brands as $brand) {
+                    if ($resource_type->brand == $brand->id) {
+                        $resource_type->brand_name = $brand->name;
+                    }
+                }
+            }
+
+            // get all awarding bodies
+            $awarding_bodies = AwardingBody::all();
+
+            // add awarding body name to resource type
+            foreach ($resource_types as $resource_type) {
+                foreach ($awarding_bodies as $awarding_body) {
+                    if ($resource_type->awarding_body == $awarding_body->id) {
+                        $resource_type->awarding_body_name = $awarding_body->awarding_body_name;
+                    }
+                }
+            }
 
             //return resource types
             return response()->json($resource_types, 200);
@@ -176,6 +202,26 @@ class ResourceTypeController extends Controller
             //get resource type by id
             $resource_type = ResourceType::onlyTrashed()->find($id);
 
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to resource type
+            foreach ($brands as $brand) {
+                if ($resource_type->brand == $brand->id) {
+                    $resource_type->brand_name = $brand->name;
+                }
+            }
+
+            // get all awarding bodies
+            $awarding_bodies = AwardingBody::all();
+
+            // add awarding body name to resource type
+            foreach ($awarding_bodies as $awarding_body) {
+                if ($resource_type->awarding_body == $awarding_body->id) {
+                    $resource_type->awarding_body_name = $awarding_body->awarding_body_name;
+                }
+            }
+
             //check if resource type exist
             if (!$resource_type) {
                 return response()->json(['message' => 'Resource type not found'], 404);
@@ -197,6 +243,30 @@ class ResourceTypeController extends Controller
         try {
             //get all deleted resource types
             $resource_types = ResourceType::onlyTrashed()->get();
+
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to resource type
+            foreach ($resource_types as $resource_type) {
+                foreach ($brands as $brand) {
+                    if ($resource_type->brand == $brand->id) {
+                        $resource_type->brand_name = $brand->name;
+                    }
+                }
+            }
+
+            // get all awarding bodies
+            $awarding_bodies = AwardingBody::all();
+
+            // add awarding body name to resource type
+            foreach ($resource_types as $resource_type) {
+                foreach ($awarding_bodies as $awarding_body) {
+                    if ($resource_type->awarding_body == $awarding_body->id) {
+                        $resource_type->awarding_body_name = $awarding_body->awarding_body_name;
+                    }
+                }
+            }
 
             //check if resource types exist
             if (!$resource_types) {
