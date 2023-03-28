@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AwardingBody;
+use App\Models\Brand;
 use App\Models\Course;
 use Illuminate\Http\Request;
 
@@ -129,6 +131,36 @@ class CourseController extends Controller
             //get all courses
             $courses = Course::all();
 
+
+            // add brand name to the course
+            $brands = Brand::all();
+            foreach ($courses as $course) {
+                foreach ($brands as $brand) {
+                    if ($course->brand == $brand->id) {
+                        $course->brand_name = $brand->name;
+                    }
+                }
+            }
+
+            // add awarding body name to the course
+            $awarding_bodies = AwardingBody::all();
+            foreach ($courses as $course) {
+                foreach ($awarding_bodies as $awarding_body) {
+                    if ($course->awarding_body == $awarding_body->id) {
+                        $course->awarding_body_name = $awarding_body->awarding_body_name;
+                    }
+                }
+            }
+
+            // set valid if course is valid
+            foreach ($courses as $course) {
+                if ($course->validity == 1) {
+                    $course->valid = 'Valid';
+                } else {
+                    $course->valid = 'Expired';
+                }
+            }
+
             //return courses
             return response()->json($courses);
 
@@ -224,6 +256,7 @@ class CourseController extends Controller
         }
 
     }
+
     //restore all courses
     public function restoreAllCourses()
     {
