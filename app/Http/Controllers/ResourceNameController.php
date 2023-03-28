@@ -68,4 +68,37 @@ class ResourceNameController extends Controller
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
+
+    // delete a resource name
+    public function deleteResourceName($id)
+    {
+        try {
+            // get resource name
+            $resource_name = ResourceName::find($id);
+
+            // delete resource name
+            $resource_name->delete();
+
+            // return response
+            return response()->json(['success' => true, 'resource_name' => $resource_name]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+
+    // get all deleted resource names
+    public function getAllDeletedResourceNames()
+    {
+        try {
+            // get all deleted resource names
+            $resource_names = ResourceName::onlyTrashed()->get();
+
+            // return response
+            return response()->json(['success' => true, 'resource_names' => $resource_names]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
 }
