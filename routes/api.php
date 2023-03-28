@@ -52,6 +52,14 @@ Route::middleware('auth:api')->group(function () {
     //restore a brand
     Route::middleware(['scope:admin'])->post('/brands/restore/{id}', [BrandController::class, 'restoreBrand']);
 
+    // resource names
+    //get all resource names
+    Route::middleware(['scope:admin'])->get('/resource_names', [\App\Http\Controllers\ResourceNameController::class, 'getAllResourceNames']);
+    //add a resource name
+    Route::middleware(['scope:admin'])->post('/resource_names', [\App\Http\Controllers\ResourceNameController::class, 'addResourceName']);
+    //update a resource name
+    Route::middleware(['scope:admin'])->put('/resource_names/{id}', [\App\Http\Controllers\ResourceNameController::class, 'updateResourceName']);
+
     //awardingbody
     //add an awarding body
     Route::middleware(['scope:admin'])->post('/awarding_body', [AwardingBodyController::class, 'addAwardingBody']);
