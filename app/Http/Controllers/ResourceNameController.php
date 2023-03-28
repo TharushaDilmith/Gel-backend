@@ -7,79 +7,65 @@ use Illuminate\Http\Request;
 
 class ResourceNameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    // get all resource names
+    public function getAllResourceNames()
     {
-        //
+        try {
+            // get all resource names
+            $resource_names = ResourceName::all();
+
+            // return response
+            return response()->json(['success' => true, 'resource_names' => $resource_names]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    // add a resource name
+    public function addResourceName(Request $request)
     {
-        //
+        try {
+            // validate request
+            $request->validate([
+                'name' => 'required|string',
+            ]);
+
+            // create resource name
+            $resource_name = ResourceName::create([
+                'name' => $request->name,
+            ]);
+
+            // return response
+            return response()->json(['success' => true, 'resource_name' => $resource_name]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    // update a resource name
+    public function updateResourceName(Request $request, $id)
     {
-        //
-    }
+        try {
+            // validate request
+            $request->validate([
+                'name' => 'required|string',
+            ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ResourceName  $resourceName
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ResourceName $resourceName)
-    {
-        //
-    }
+            // get resource name
+            $resource_name = ResourceName::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ResourceName  $resourceName
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ResourceName $resourceName)
-    {
-        //
-    }
+            // update resource name
+            $resource_name->update([
+                'name' => $request->name,
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ResourceName  $resourceName
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ResourceName $resourceName)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ResourceName  $resourceName
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ResourceName $resourceName)
-    {
-        //
+            // return response
+            return response()->json(['success' => true, 'resource_name' => $resource_name]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 }
