@@ -25,6 +25,12 @@ class CourseController extends Controller
             //save the data
             $course = new Course();
             $course->course_name = $request->course_name;
+            $course->brand = $request->brand;
+            $course->course_type = $request->course_type;
+            $course->resource_type = $request->resource_type;
+            $course->course_link = $request->course_link;
+            $course->validity = $request->validity;
+            $course->awarding_body = $request->awarding_body;
 
             //check if saved
             if ($course->save()) {

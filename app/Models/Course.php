@@ -11,7 +11,13 @@ class Course extends Model
     use HasFactory , SoftDeletes;
 
     protected $fillable = [
-        'course_name', 
+        'course_name',
+        'brand',
+        'course_type',
+        'resource_type',
+        'course_link',
+        'validity',
+        'awarding_body',
     ];
 
 
@@ -19,5 +25,17 @@ class Course extends Model
     public function resources()
     {
         return $this->hasMany('App\Models\Resources');
+    }
+
+    //course relationship with awarding body
+    public function awarding_body()
+    {
+        return $this->belongsTo('App\Models\AwardingBody');
+    }
+
+    //course relationship with brand
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
     }
 }
