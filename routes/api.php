@@ -59,6 +59,10 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->post('/resource_names', [\App\Http\Controllers\ResourceNameController::class, 'addResourceName']);
     //update a resource name
     Route::middleware(['scope:admin'])->put('/resource_names/{id}', [\App\Http\Controllers\ResourceNameController::class, 'updateResourceName']);
+    //delete a resource name
+    Route::middleware(['scope:admin'])->delete('/resource_names/{id}', [\App\Http\Controllers\ResourceNameController::class, 'deleteResourceName']);
+    //get all deleted resource names
+    Route::middleware(['scope:admin'])->get('/resource_names/deleted', [\App\Http\Controllers\ResourceNameController::class, 'getAllDeletedResourceNames']);
 
     //awardingbody
     //add an awarding body
