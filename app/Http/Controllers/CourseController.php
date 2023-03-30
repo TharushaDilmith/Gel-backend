@@ -16,6 +16,11 @@ class CourseController extends Controller
             //validate the data
             $this->validate($request, [
                 'course_name' => 'required',
+                'brand' => 'required',
+                'course_type' => 'required',
+                'course_link' => 'required',
+                'validity' => 'required',
+                'awarding_body' => 'required',
             ]);
 
             //check if the course already exists
@@ -29,7 +34,6 @@ class CourseController extends Controller
             $course->course_name = $request->course_name;
             $course->brand = $request->brand;
             $course->course_type = $request->course_type;
-            $course->resource_type = $request->resource_type;
             $course->course_link = $request->course_link;
             $course->validity = $request->validity;
             $course->awarding_body = $request->awarding_body;
@@ -61,6 +65,11 @@ class CourseController extends Controller
             //validate the data
             $this->validate($request, [
                 'course_name' => 'required',
+                'brand' => 'required',
+                'course_type' => 'required',
+                'course_link' => 'required',
+                'validity' => 'required',
+                'awarding_body' => 'required',
             ]);
 
             $course = Course::find($id);
@@ -72,6 +81,11 @@ class CourseController extends Controller
 
             //update course
             $course->course_name = $request->course_name;
+            $course->brand = $request->brand;
+            $course->course_type = $request->course_type;
+            $course->course_link = $request->course_link;
+            $course->validity = $request->validity;
+            $course->awarding_body = $request->awarding_body;
 
             //check if updated
             if ($course->save()) {
