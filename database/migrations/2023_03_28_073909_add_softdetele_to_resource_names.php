@@ -28,6 +28,7 @@ class AddSoftdeteleToResourceNames extends Migration
     {
         Schema::table('resource_names', function (Blueprint $table) {
             //
+            $table->dropSoftDeletes();
         });
     }
 }

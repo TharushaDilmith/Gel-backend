@@ -34,6 +34,13 @@ class AddBrandToResourceTypes extends Migration
     {
         Schema::table('resource_types', function (Blueprint $table) {
             //
+            $table->dropForeign(['brand']);
+            $table->dropColumn('brand');
+
+            $table->dropForeign(['awarding_body']);
+            $table->dropColumn('awarding_body');
+
+            $table->dropColumn('validity');
         });
     }
 }
