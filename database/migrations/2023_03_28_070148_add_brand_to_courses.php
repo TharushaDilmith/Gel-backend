@@ -45,6 +45,18 @@ class AddBrandToCourses extends Migration
     {
         Schema::table('courses', function (Blueprint $table) {
             //
+            $table->dropForeign(['brand']);
+            $table->dropColumn('brand');
+
+            $table->dropForeign(['awarding_body']);
+            $table->dropColumn('awarding_body');
+
+            $table->dropColumn('resource_type');
+            $table->dropColumn('course_type');
+
+            $table->dropColumn('course_link');
+            $table->dropColumn('validity');
+
         });
     }
 }

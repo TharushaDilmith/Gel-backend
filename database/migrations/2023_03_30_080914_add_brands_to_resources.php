@@ -29,6 +29,8 @@ class AddBrandsToResources extends Migration
     {
         Schema::table('resources', function (Blueprint $table) {
             //
+            $table->dropForeign(['brand']);
+            $table->dropColumn('brand');
         });
     }
 }
