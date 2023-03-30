@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropResourceTypeFromCourses extends Migration
+class DropResourceImageFromResources extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class DropResourceTypeFromCourses extends Migration
      */
     public function up()
     {
-        Schema::table('courses', function (Blueprint $table) {
-            // drop the resource_type column
-            $table->dropColumn('resource_type');
+        Schema::table('resources', function (Blueprint $table) {
+            //
+            $table->dropColumn('resource_image');
         });
     }
 
@@ -26,9 +26,9 @@ class DropResourceTypeFromCourses extends Migration
      */
     public function down()
     {
-        Schema::table('courses', function (Blueprint $table) {
-            // add the resource_type column
-            $table->string('resource_type');
+        Schema::table('resources', function (Blueprint $table) {
+            //
+            $table->string('resource_image');
         });
     }
 }
