@@ -87,6 +87,8 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->post('/awarding_body/delete/{id}', [AwardingBodyController::class, 'deleteAwardingBodyPermanently']);
     //delete permanently all deleted awarding bodies
     Route::middleware(['scope:admin'])->post('/awarding_body/delete', [AwardingBodyController::class, 'deleteAllDeletedAwardingBodiesPermanently']);
+    // generate pdf report
+    Route::middleware(['scope:admin'])->get('/awarding_body/report', [AwardingBodyController::class, 'generatePdfReport']);
 
     //resource type
     //add a resource type

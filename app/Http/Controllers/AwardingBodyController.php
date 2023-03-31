@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AwardingBody;
 use App\Models\Brand;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+
 
 class AwardingBodyController extends Controller
 {
@@ -289,6 +291,35 @@ class AwardingBodyController extends Controller
             return response()->json(['error' => $th->getMessage()], 500);
         }
 
+    }
+
+    // generate pdf report
+    public function generatePdfReport()
+    {
+        try {
+            // generate pdf report
+            $awarding_bodies = AwardingBody::all();
+
+            // get all brands
+            $brands = Brand::all();
+
+            // add brand name to awarding body
+
+            foreach ($awarding_bodies as $awarding_body) {
+                foreach ($brands as $brand) {
+                    if ($awarding_body->brand == $brand->id) {
+                        $awarding_body->brand_name = $brand->name;
+                    }
+                }
+            }
+
+            $pdf = PDF::loadView('awardingBody', compact('awarding_bodies'));
+            return $pdf->download('awarding_bodies.pdf');
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
 }
