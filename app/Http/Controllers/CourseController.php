@@ -192,6 +192,29 @@ class CourseController extends Controller
             //find course
             $course = Course::find($id);
 
+            // add brand name to the course
+            $brands = Brand::all();
+            foreach ($brands as $brand) {
+                if ($course->brand == $brand->id) {
+                    $course->brand_name = $brand->name;
+                }
+            }
+
+            // add awarding body name to the course
+            $awarding_bodies = AwardingBody::all();
+            foreach ($awarding_bodies as $awarding_body) {
+                if ($course->awarding_body == $awarding_body->id) {
+                    $course->awarding_body_name = $awarding_body->awarding_body_name;
+                }
+            }
+
+            // set valid if course is valid
+            if ($course->validity == 1) {
+                $course->valid = 'Valid';
+            } else {
+                $course->valid = 'Expired';
+            }
+
             //check if course exists
             if (!isset($course)) {
                 return response()->json(['error' => 'No Course Found'], 404);
