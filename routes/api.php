@@ -129,6 +129,8 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(['scope:admin'])->post('/course/delete/{id}', [CourseController::class, 'deletePermanentlyCourse']);
     //delete permanently all deleted courses
     Route::middleware(['scope:admin'])->post('/course/delete', [CourseController::class, 'deletePermanentlyAllCourses']);
+    // generate pdf report
+    Route::middleware(['scope:admin'])->get('/course/report', [CourseController::class, 'generatePdfReport']);
 
     //resource
     //add a resource
