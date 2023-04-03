@@ -24,6 +24,6 @@ class AwardingBody extends Model
     //brand relationship
     public function brand()
     {
-        return $this->belongsTo('App\Models\Brand');
+        return $this->belongsTo('App\Models\brand');
     }
 }
