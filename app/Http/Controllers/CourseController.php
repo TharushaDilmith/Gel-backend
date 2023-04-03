@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AwardingBody;
-use App\Models\Brand;
+use App\Models\brand;
 use App\Models\Course;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -148,7 +148,7 @@ class CourseController extends Controller
 
 
             // add brand name to the course
-            $brands = Brand::all();
+            $brands = brand::all();
             foreach ($courses as $course) {
                 foreach ($brands as $brand) {
                     if ($course->brand == $brand->id) {
@@ -194,7 +194,7 @@ class CourseController extends Controller
             $course = Course::find($id);
 
             // add brand name to the course
-            $brands = Brand::all();
+            $brands = brand::all();
             foreach ($brands as $brand) {
                 if ($course->brand == $brand->id) {
                     $course->brand_name = $brand->name;
@@ -398,7 +398,7 @@ class CourseController extends Controller
             $courses = Course::all();
 
             // add brand name to the course
-            $brands = Brand::all();
+            $brands = brand::all();
 
             foreach ($courses as $course) {
                 foreach ($brands as $brand) {

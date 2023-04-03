@@ -36,6 +36,6 @@ class Course extends Model
     //course relationship with brand
     public function brand()
     {
-        return $this->belongsTo('App\Models\Brand');
+        return $this->belongsTo('App\Models\brand');
     }
 }

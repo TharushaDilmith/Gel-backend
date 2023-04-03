@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AwardingBody;
-use App\Models\Brand;
+use App\Models\brand;
 use App\Models\ResourceType;
 use Illuminate\Http\Request;
 
@@ -72,7 +72,7 @@ class ResourceTypeController extends Controller
             $resource_types = ResourceType::all();
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to resource type
             foreach ($resource_types as $resource_type) {
@@ -203,7 +203,7 @@ class ResourceTypeController extends Controller
             $resource_type = ResourceType::onlyTrashed()->find($id);
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to resource type
             foreach ($brands as $brand) {
@@ -245,7 +245,7 @@ class ResourceTypeController extends Controller
             $resource_types = ResourceType::onlyTrashed()->get();
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to resource type
             foreach ($resource_types as $resource_type) {
