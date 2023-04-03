@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AwardingBody;
-use App\Models\Brand;
+use App\Models\brand;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -57,7 +57,7 @@ class AwardingBodyController extends Controller
             $awarding_bodies = AwardingBody::all();
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to awarding body
             foreach ($awarding_bodies as $awarding_body) {
@@ -87,7 +87,7 @@ class AwardingBodyController extends Controller
             $awarding_body = AwardingBody::find($id);
 
             // add brand name to awarding body
-            $brand = Brand::find($awarding_body->brand);
+            $brand = brand::find($awarding_body->brand);
             $awarding_body->brand_name = $brand->name;
 
             //check if awarding body exists
@@ -162,7 +162,7 @@ class AwardingBodyController extends Controller
             $awarding_body = AwardingBody::onlyTrashed()->find($id);
 
             // add brand name to awarding body
-            $brand = Brand::find($awarding_body->brand);
+            $brand = brand::find($awarding_body->brand);
             $awarding_body->brand_name = $brand->name;
 
             //check if awarding body exists
@@ -187,7 +187,7 @@ class AwardingBodyController extends Controller
             $awarding_bodies = AwardingBody::onlyTrashed()->get();
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to awarding body
             foreach ($awarding_bodies as $awarding_body) {
@@ -301,7 +301,7 @@ class AwardingBodyController extends Controller
             $awarding_bodies = AwardingBody::all();
 
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
 
             // add brand name to awarding body
 
