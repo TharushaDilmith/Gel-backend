@@ -15,6 +15,7 @@ class AddBrandToAwardingBodies extends Migration
     {
         Schema::table('awarding_bodies', function (Blueprint $table) {
             // add brand_id to awarding_bodies table;
+            $table->unsignedBigInteger('brand')->nullable();
             $table->foreign('brand')->references('id')->on('brands');
         });
     }
