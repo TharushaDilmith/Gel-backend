@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\brand;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class BrandController extends Controller
     {
         try {
             // get all brands
-            $brands = Brand::all();
+            $brands = brand::all();
             return response()->json([
                 'success' => true,
                 'message' => 'All Brands Successfully Fetched',
@@ -47,13 +48,13 @@ class BrandController extends Controller
             //check whether brand exists by name
             $brand = brand::where('name', $request->name)->first();
             if ($brand) {
-                return response()->json(['message' => 'Brand already exists','success' => false], 200);
+                return response()->json(['message' => 'brand already exists','success' => false], 200);
             }
 
             $brand = brand::create($request->all());
             return response()->json([
                 'success' => true,
-                'message' => 'Brand Successfully Created',
+                'message' => 'brand Successfully Created',
                 'data' => $brand,
             ], 200);
         }catch (\Throwable $th) {
@@ -77,14 +78,14 @@ class BrandController extends Controller
             //check whether brand exists by name
             $brand = brand::where('name', $request->name)->first();
             if ($brand) {
-                return response()->json(['message' => 'Brand already exists','success' => false,], 200);
+                return response()->json(['message' => 'brand already exists','success' => false,], 200);
             }
 
             $brand = brand::find($id);
             $brand->update($request->all());
             return response()->json([
                 'success' => true,
-                'message' => 'Brand Successfully Updated',
+                'message' => 'brand Successfully Updated',
                 'data' => $brand,
             ], 200);
         }catch (\Throwable $th) {
@@ -101,7 +102,7 @@ class BrandController extends Controller
             $brand->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Brand Successfully Deleted',
+                'message' => 'brand Successfully Deleted',
             ], 200);
         }catch (\Throwable $th) {
             //throw $th;
@@ -114,7 +115,7 @@ class BrandController extends Controller
     {
         try {
             //get all deleted AwardingBodies
-            $brands = Brand::onlyTrashed()->get();
+            $brands = brand::onlyTrashed()->get();
 
             //return all deleted awarding bodies
             return response()->json($brands, 200);
@@ -131,7 +132,7 @@ class BrandController extends Controller
     {
         try {
             //get all deleted brands
-            $brands = Brand::onlyTrashed()->restore();
+            $brands = brand::onlyTrashed()->restore();
 
 
             //return all deleted brands
@@ -149,15 +150,15 @@ class BrandController extends Controller
     {
         try {
             //get an AwardingBody
-            $brand = Brand::onlyTrashed()->find($id)->restore();
+            $brand = brand::onlyTrashed()->find($id)->restore();
 
             //check if awarding body exists
             if (is_null($brand)) {
-                return response()->json(["message" => "Brand with id $id not found",'success' => true,], 404);
+                return response()->json(["message" => "brand with id $id not found",'success' => true,], 404);
             }
 
             //return the restored awarding body
-            return response()->json(['success' => true, 'message' => 'Brand Restored Successfully'],200);
+            return response()->json(['success' => true, 'message' => 'brand Restored Successfully'],200);
 
         } catch (\Throwable $th) {
             //throw $th;
